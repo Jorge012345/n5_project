@@ -1,0 +1,85 @@
+org: jorge012345
+app: n5-dev
+service: traffic-violations
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - secretsmanager:GetSecretValue
+        - dynamodb:Scan
+        - dynamodb:BatchGetItem
+      Resource:
+        - arn:aws:dynamodb:us-east-1:*:table/Person
+        - arn:aws:dynamodb:us-east-1:*:table/Vehicle
+        - arn:aws:dynamodb:us-east-1:*:table/Officer
+        - arn:aws:dynamodb:us-east-1:*:table/Infraction
+        - arn:aws:secretsmanager:us-east-1:664100670348:secret:traffic-violations/secret-IusmBp
+
+functions:
+  api:
+    handler: main.handler
+    layers:
+      - arn:aws:lambda:us-east-1:664100670348:layer:python-dependencies:8
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+
+resources:
+  Resources:
+    PersonTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Person
+        AttributeDefinitions:
+          - AttributeName: person_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: person_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    VehicleTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Vehicle
+        AttributeDefinitions:
+          - AttributeName: vehicle_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: vehicle_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    OfficerTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Officer
+        AttributeDefinitions:
+          - AttributeName: officer_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: officer_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    InfractionTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Infraction
+        AttributeDefinitions:
+          - AttributeName: infraction_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: infraction_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
