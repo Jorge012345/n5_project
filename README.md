@@ -71,6 +71,69 @@ This project uses the Serverless Framework to deploy the API to AWS Lambda and A
 
 4. The deployment output will provide the URL to access your API. You can open your browser and navigate to the provided URL followed by `/dev/docs` to view and interact with your API using the Swagger UI.
 
+### Current Deployment
+
+The project is currently deployed and accessible at the following URL:
+    ```
+    https://h5i821jqrj.execute-api.us-east-1.amazonaws.com/
+    ```
+
+You can access the API documentation and interact with the API using the Swagger UI at:
+    ```
+    https://h5i821jqrj.execute-api.us-east-1.amazonaws.com/dev/docs
+    ```
+
+## Authentication
+
+### Generating Access Tokens
+
+The API uses Bearer Token authentication for secure access. Each police officer is associated with an access token which needs to be generated and included in the headers of POST requests.
+
+#### Generating a Token via API
+
+To generate an access token, make a POST request to the `/auth/token` endpoint with the officer's ID. Here is an example using `curl`:
+
+```sh
+curl -X POST "https://h5i821jqrj.execute-api.us-east-1.amazonaws.com/dev/auth/token" \
+-H "accept: application/json" \
+-H "Content-Type: application/json" \
+-d '{"officer_id": "officer_1234"}'
+```
+
+
+## AWS Architecture Proposal
+
+For deploying this application in production, the following AWS services are recommended:
+
+1. **AWS Lambda:**
+   - Used to run the FastAPI application without managing servers. It scales automatically and you only pay for the compute time you consume.
+
+2. **Amazon API Gateway:**
+   - Provides a secure endpoint to invoke the Lambda functions. It handles all the tasks associated with accepting and processing up to hundreds of thousands of concurrent API calls, including traffic management, authorization and access control, monitoring, and API version management.
+
+3. **Amazon DynamoDB:**
+   - A fully managed NoSQL database service that provides fast and predictable performance with seamless scalability. It’s used to store all the application data such as persons, vehicles, officers, and infractions.
+
+4. **AWS Secrets Manager:**
+   - Helps you protect access to your applications, services, and IT resources without the upfront cost and complexity of managing your own hardware security module (HSM) infrastructure. It’s used to securely store the `SECRET_KEY` for JWT token generation.
+
+5. **Amazon CloudWatch:**
+   - Provides monitoring for AWS cloud resources and applications. It can be used to collect and track metrics, collect and monitor log files, and set alarms.
+
+6. **Amazon S3:**
+   - Used for static file storage if needed (e.g., storing documentation, logs, etc.)
+
+### Justification
+
+- **AWS Lambda** is ideal for running the FastAPI application as it abstracts the server management and scales automatically with demand.
+- **Amazon API Gateway** integrates seamlessly with Lambda and provides robust features for managing API calls, including throttling, logging, and security.
+- **Amazon DynamoDB** offers a highly scalable and low-latency solution for database needs, which is crucial for a responsive API.
+- **AWS Secrets Manager** ensures sensitive information such as the `SECRET_KEY` is stored securely and is easily accessible by the application.
+- **Amazon CloudWatch** provides comprehensive monitoring and logging capabilities, which are essential for maintaining and troubleshooting the application in production.
+- **Amazon S3** is a versatile service that can be used for storing various types of static assets required by the application.
+
+By leveraging these AWS services, the application can achieve high availability, scalability, and security, ensuring a robust production deployment.
+
 
 ## Additional Information
 
