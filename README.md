@@ -71,34 +71,6 @@ This project uses the Serverless Framework to deploy the API to AWS Lambda and A
 
 4. The deployment output will provide the URL to access your API. You can open your browser and navigate to the provided URL followed by `/dev/docs` to view and interact with your API using the Swagger UI.
 
-## Project Structure
-n5_project/
-├── .serverless/
-├── src/
-│   ├── app/
-│   │   ├── routers/
-│   │   │   ├── init.py
-│   │   │   ├── auth.py
-│   │   │   ├── infraction.py
-│   │   │   ├── officer.py
-│   │   │   ├── person.py
-│   │   │   └── vehicle.py
-│   │   ├── services/
-│   │   │   ├── init.py
-│   │   │   ├── auth.py
-│   │   │   ├── infraction.py
-│   │   │   ├── officer.py
-│   │   │   ├── person.py
-│   │   │   └── vehicle.py
-│   │   ├── config.py
-│   │   ├── schemas.py
-│   │   └── init.py
-├── .gitignore
-├── README.md
-├── requirements.txt
-├── serverless.yml
-└── main.py
-└── Dockerfile
 
 ## Additional Information
 
