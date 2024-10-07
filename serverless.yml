@@ -23,19 +23,47 @@ provider:
         - arn:aws:dynamodb:us-east-1:*:table/Officer
         - arn:aws:dynamodb:us-east-1:*:table/Infraction
         - arn:aws:secretsmanager:us-east-1:664100670348:secret:traffic-violations/secret-IusmBp
-
+    - Effect: Allow
+      Action:
+        - ec2:CreateNetworkInterface
+        - ec2:DescribeNetworkInterfaces
+        - ec2:DeleteNetworkInterface
+        - ec2:DescribeVpcs
+        - ec2:DescribeSubnets
+        - ec2:DescribeSecurityGroups
+      Resource: "*"
 functions:
   api:
     handler: main.handler
     layers:
-      - arn:aws:lambda:us-east-1:664100670348:layer:python-dependencies:8
+      - arn:aws:lambda:us-east-1:664100670348:layer:python-dependencies:10
     events:
       - http:
           path: /{proxy+}
           method: ANY
+    vpc:
+      securityGroupIds:
+        - sg-0d1e3dc0ce4294efa
+        - sg-0f87e79eeaa85d33b
+      subnetIds:
+        - subnet-0b404ff18afceafd4
+        - subnet-0231b187b68ea503c
 
 resources:
   Resources:
+    DynamoDBVPCEndpoint:
+      Type: AWS::EC2::VPCEndpoint
+      Properties:
+        ServiceName: com.amazonaws.us-east-1.dynamodb
+        VpcId: vpc-0f8ae29e8f6f98874
+        VpcEndpointType: Interface
+        SubnetIds:
+          - subnet-0b404ff18afceafd4
+          - subnet-0231b187b68ea503c
+        SecurityGroupIds:
+          - sg-0d1e3dc0ce4294efa
+          - sg-0f87e79eeaa85d33b
+      
     PersonTable:
       Type: AWS::DynamoDB::Table
       Properties:

@@ -31,13 +31,13 @@ def generate_report(person_email: str):
         person = Person.get_person_by_email(person_email)
         if not person:
             raise HTTPException(status_code=404, detail="Person not found")
-        print("....person: ", person)
+        
         vehicles = Vehicle.get_vehicles_by_person_id(person.person_id)
         if not vehicles:
             raise HTTPException(status_code=404, detail="Vehicles not found")
-        print("....vehicles: ", vehicles)
+        
         license_plates = [vehicle.license_plate for vehicle in vehicles]
-        print("....license_plates: ", license_plates)
+        
         infractions = Infraction.get_infractions_by_license_plates(license_plates)
         if infractions:
             return infractions

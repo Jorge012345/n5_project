@@ -2,8 +2,20 @@ from fastapi import APIRouter, HTTPException, status
 from typing import List
 from src.app import schemas
 from src.app.services.officer import Officer
+# import redis
 
 router = APIRouter()
+
+# redis_host = "master.my-redis.ubhjx9.use1.cache.amazonaws.com"
+# redis_password = "thistokenisforredis777"
+# redis_client = redis.StrictRedis(
+#         host=redis_host,
+#         port=6379,
+#         password=redis_password,
+#         decode_responses=True,
+#         ssl=True,
+#         ssl_cert_reqs=None
+#     )
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)

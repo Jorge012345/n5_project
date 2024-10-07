@@ -71,18 +71,6 @@ This project uses the Serverless Framework to deploy the API to AWS Lambda and A
 
 4. The deployment output will provide the URL to access your API. You can open your browser and navigate to the provided URL followed by `/dev/docs` to view and interact with your API using the Swagger UI.
 
-### Current Deployment
-
-The project is currently deployed and accessible at the following URL:
-    ```
-    https://h5i821jqrj.execute-api.us-east-1.amazonaws.com/
-    ```
-
-You can access the API documentation and interact with the API using the Swagger UI at:
-    ```
-    https://h5i821jqrj.execute-api.us-east-1.amazonaws.com/dev/docs
-    ```
-
 ## Authentication
 
 ### Generating Access Tokens
@@ -94,7 +82,7 @@ The API uses Bearer Token authentication for secure access. Each police officer 
 To generate an access token, make a POST request to the `/auth/token` endpoint with the officer's ID. Here is an example using `curl`:
 
 ```sh
-curl -X POST "https://h5i821jqrj.execute-api.us-east-1.amazonaws.com/dev/auth/token" \
+curl -X POST "http://localhost:8000/dev/auth/token" \
 -H "accept: application/json" \
 -H "Content-Type: application/json" \
 -d '{"officer_id": "officer_1234"}'

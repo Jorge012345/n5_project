@@ -4,7 +4,7 @@ from botocore.exceptions import ClientError
 from src.app import schemas
 from boto3.dynamodb.conditions import Attr
 
-dynamodb = boto3.resource("dynamodb")
+dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
 table = dynamodb.Table("Officer")
 
 
@@ -21,10 +21,12 @@ class Officer:
     def get_officer(officer_id: str):
         try:
             response = table.get_item(Key={"officer_id": officer_id})
+            
             return response.get("Item")
         except ClientError as e:
             raise Exception("Error getting officer: " + e.response["Error"]["Message"])
-
+        except Exception as e:
+            print("....Exception: ",e)
     @staticmethod
     def update_officer(officer_id: str, officer: schemas.Officer):
         update_expression = "SET #name = :name, identification = :identification"
